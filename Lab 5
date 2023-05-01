@@ -1,0 +1,88 @@
+#Задана рекуррентная функция. Область определения функции – натуральные числа. Написать программу сравнительного вычисления данной функции рекурсивно и итерационно. 
+Определить (смоделировать) границы применимости рекурсивного и итерационного подхода. Результаты сравнительного исследования времени вычисления представить
+в табличной и графической форме в виде отчета по лабораторной работе. 
+Вариант 23. 23. F(0) = F(1) = -100, F(n) = -F(n–1)! + 2*F(n-2), при n > 1
+
+
+import time
+import math
+from math import factorial
+def recursive_f(n):
+    if n == 0 or n == 1:
+        return -100
+    else:
+        return -recursive_f(n - 1) * factorial(n-1) + 2 * recursive_f(n - 2)
+
+
+def iterative_f(n):
+    if n <= 1:
+        return -100
+    elif n == 2:
+        return -200
+    else:
+        f_minus_2 = -200
+        f_minus_1 = -100
+        for i in range(3, n+1):
+            f = -f_minus_1 * math.factorial(i-1) + 2*f_minus_2
+            f_minus_2 = f_minus_1
+            f_minus_1 = f
+        return f
+
+
+n = int(input("Введите n: "))
+
+print("{:<5} {:<20} {:<20} {:<20} {:<20}".format("n", "Время рекурсии (с)", "Время итерации (с)", "F(n) (рекурсия)",
+                                                 "F(n) (итерация)"))
+for i in range(1, n + 1):
+    # Вычисление рекурсивно и замер времени
+    start_time = time.time()
+    recursive_result = recursive_f(i)
+    recursive_time = time.time() - start_time
+
+    # Вычисление итерационно и замер времени
+    start_time = time.time()
+    iterative_result = iterative_f(i)
+    iterative_time = time.time() - start_time
+
+    print("{:<5} {:<20.5f} {:<20.5f} {:<20} {:<20}".format(i, recursive_time, iterative_time, recursive_result,
+                                                           iterative_result))
+
+import matplotlib.pyplot as plt
+n_list = list(range(1, n+1))
+recursive_time_list = []
+iterative_time_list = []
+
+for i in range(1, n + 1):
+    start_time = time.time()
+    recursive_f(i)
+    recursive_time = time.time() - start_time
+    recursive_time_list.append(recursive_time)
+
+    start_time = time.time()
+    iterative_f(i)
+    iterative_time = time.time() - start_time
+    iterative_time_list.append(iterative_time)
+
+plt.plot(n_list, recursive_time_list, label="Рекурсия")
+plt.plot(n_list, iterative_time_list, label="Итерация")
+plt.xlabel("n")
+plt.ylabel("Время (с)")
+plt.title("Сравнение рекурсивного и итерационного вычисления функции")
+plt.legend()
+plt.show()
+
+
+n_values = range(1, 100, 10)
+iterative_time_list = []
+
+for n in n_values:
+    start_time = time.time()
+    iterative_f(n)
+    iterative_time = time.time() - start_time
+    iterative_time_list.append(iterative_time)
+
+plt.plot(n_values, iterative_time_list)
+plt.xlabel("n")
+plt.ylabel("Время (с)")
+plt.title("Итерационный подход")
+plt.show()
