@@ -6,6 +6,7 @@
 
 import time
 import matplotlib.pyplot as plt
+
 def recursive_f(n):
     if n == 0 or n == 1:
         return -100
@@ -33,8 +34,7 @@ def iterative_f(n):
 
 n = int(input("Введите n: "))
 
-print("{:<5} {:<20} {:<20} {:<20} {:<20}".format("n", "Время рекурсии (с)", "Время итерации (с)", "F(n) (рекурсия)",
-                                                 "F(n) (итерация)"))
+print("{:<5} {:<20} {:<20} {:<20} {:<20}".format("n", "Время рекурсии (с)", "Время итерации (с)", "F(n) (рекурсия)", "F(n) (итерация)"))
 for i in range(1, n + 1):
     # Вычисление рекурсивно и замер времени
     start_time = time.time()
@@ -46,8 +46,7 @@ for i in range(1, n + 1):
     iterative_result = iterative_f(i)
     iterative_time = time.time() - start_time
 
-    print("{:<5} {:<20.5f} {:<20.5f} {:<20} {:<20}".format(i, recursive_time, iterative_time, recursive_result,
-                                                           iterative_result))
+    print("{:<5} {:<20.5f} {:<20.5f} {:<20} {:<20}".format(i, recursive_time, iterative_time, recursive_result, iterative_result))
 
 n_list = list(range(1, n+1))
 recursive_time_list = []
@@ -72,6 +71,21 @@ plt.title("Сравнение рекурсивного и итерационно
 plt.legend()
 plt.show()
 
+
+n_values = range(1, 30000, 10)
+iterative_time_list = []
+
+for n in n_values:
+    start_time = time.time()
+    iterative_f(n)
+    iterative_time = time.time() - start_time
+    iterative_time_list.append(iterative_time)
+
+plt.plot(n_values, iterative_time_list)
+plt.xlabel("n")
+plt.ylabel("Время (с)")
+plt.title("Итерационный подход")
+plt.show()
 
 n_values = range(1, 10000, 10)
 iterative_time_list = []
